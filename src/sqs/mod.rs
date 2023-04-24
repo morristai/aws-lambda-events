@@ -16,7 +16,7 @@ pub struct SqsEvent {
 #[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct S3 {
-    pub s3: Option<S3Entity>,
+    pub s3: S3Entity,
 }
 
 /// An individual SQS Message, its metadata, and Message Attributes
