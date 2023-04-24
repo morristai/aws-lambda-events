@@ -1,8 +1,9 @@
-use crate::{custom_serde::*, encodings::Base64Data};
-use serde::de::DeserializeOwned;
-use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use serde::{Deserialize, Serialize};
+use serde::de::DeserializeOwned;
 use s3::S3Entity;
+
+use crate::{custom_serde::*, encodings::Base64Data};
 
 /// The Event sent to Lambda from SQS. Contains 1 or more individual SQS Messages
 #[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
@@ -10,6 +11,12 @@ use s3::S3Entity;
 pub struct SqsEvent {
     #[serde(rename = "Records")]
     pub records: Vec<SqsMessage>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct S3 {
+    pub s3: Option<S3Entity>,
 }
 
 /// An individual SQS Message, its metadata, and Message Attributes
@@ -22,7 +29,7 @@ pub struct SqsMessage {
     #[serde(default)]
     pub receipt_handle: Option<String>,
     #[serde(default)]
-    pub body: Option<String>,
+    pub body: Option<S3>,
     #[serde(default)]
     pub md5_of_body: Option<String>,
     #[serde(default)]
@@ -40,7 +47,6 @@ pub struct SqsMessage {
     pub event_source: Option<String>,
     #[serde(default)]
     pub aws_region: Option<String>,
-    pub s3: Option<S3Entity>
 }
 
 /// Alternative to `SqsEvent` to be used alongside `SqsMessageObj<T>` when you need to deserialize a nested object into a struct of type `T` within the SQS Message rather than just using the raw SQS Message string
