@@ -40,6 +40,7 @@ pub struct SqsMessage {
     pub event_source: Option<String>,
     #[serde(default)]
     pub aws_region: Option<String>,
+    #[serde(default)]
     pub s3: Option<S3Entity>
 }
 
